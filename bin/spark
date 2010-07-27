@@ -67,6 +67,7 @@ var usage = ''
     + '  -p, --port NUM       Port number, defaults to 3000\n'
     + '  --ssl-key PATH       SSL key file\n'
     + '  --ssl-crt PATH       SSL certificate file\n'
+    + '  --ssl-ca PATH        SSL ca file\n'
     + '  -n, --workers NUM    Number of worker processes to spawn\n'
     + '  -I, --include PATH   Unshift the given path to require.paths\n'
     + '  -E, --env NAME       Set environment, defaults to "development"\n'
@@ -263,7 +264,8 @@ function enableSSL(app, env) {
         var crypto = require('crypto');
         app.setSecure(crypto.createCredentials({
           key: env.sslKey,
-          cert: env.sslCrt
+          cert: env.sslCrt,
+          ca: env.sslCa
         }));
     }
 }
@@ -464,6 +466,9 @@ function parseArguments(args, cmd) {
                 break;
             case '--ssl-key':
                 env.sslKey = fs.readFileSync(requireArg('--ssl-key'), 'ascii');
+                break;
+            case '--ssl-ca':
+                env.sslCa = fs.readFileSync(requireArg('--ssl-ca'), 'ascii');
                 break;
             case '--ssl-crt':
                 env.sslCrt = fs.readFileSync(requireArg('--ssl-crt'), 'ascii');
